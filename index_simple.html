@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Code Style Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-section">
+            <h1>CV Code Style Generator</h1>
+            <p style="color: #666; font-size: 14px; margin-bottom: 20px; text-align: center;">
+                <span style="color: #dc3545;">*</span> หมายถึงข้อมูลที่จำเป็นต้องกรอก
+            </p>
+            
+            <div class="form-group">
+                <label for="photo">รูปถ่าย</label>
+                <input type="file" id="photo" accept="image/*" onchange="handlePhotoUpload(event)">
+                <small style="color: #666; display: block; margin-top: 5px;">รองรับไฟล์: JPG, PNG, GIF (แนะนำขนาด 180x220px)</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="fullName">ชื่อ-นามสกุล <span style="color: #dc3545;">*</span></label>
+                <input type="text" id="fullName" placeholder="สมชาย ดีเวลอปเปอร์" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="position">ตำแหน่ง <span style="color: #dc3545;">*</span></label>
+                <input type="text" id="position" placeholder="Full Stack Developer" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">อีเมล <span style="color: #dc3545;">*</span></label>
+                <input type="email" id="email" placeholder="somchai.dev@techmail.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">โทรศัพท์ <span style="color: #dc3545;">*</span></label>
+                <input type="tel" id="phone" placeholder="08 1234 5678" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="age">อายุ <span style="color: #dc3545;">*</span></label>
+                <input type="number" id="age" placeholder="28" min="18" max="65" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="address">ที่อยู่ <span style="color: #dc3545;">*</span></label>
+                <input type="text" id="address" placeholder="กรุงเทพมหานคร" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="hasLicense">มีใบขับขี่</label>
+                <select id="hasLicense">
+                    <option value="true">มี</option>
+                    <option value="false">ไม่มี</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>ทักษะ</label>
+                <div class="skills-input">
+                    <input type="text" id="skillInput" placeholder="เพิ่มทักษะ...">
+                    <button type="button" class="btn-primary" onclick="addSkill()">เพิ่ม</button>
+                </div>
+                <div id="skillsList"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="degree">วุฒิการศึกษา <span style="color: #dc3545;">*</span></label>
+                <input type="text" id="degree" placeholder="วิศวกรรมคอมพิวเตอร์" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="university">มหาวิทยาลัย <span style="color: #dc3545;">*</span></label>
+                <input type="text" id="university" placeholder="จุฬาลงกรณ์มหาวิทยาลัย" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="gradYear">ปีที่จบ <span style="color: #dc3545;">*</span></label>
+                <input type="number" id="gradYear" placeholder="2564" min="2500" max="2570" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="company">บริษัทปัจจุบัน <span style="color: #dc3545;">*</span></label>
+                <input type="text" id="company" placeholder="TechCorp Thailand" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="experience">ประสบการณ์ทำงาน</label>
+                <textarea id="experience" placeholder="• Full Stack Developer @ TechCorp (2566-ปัจจุบัน)
+• Junior Developer @ StartupXYZ (2564-2566)"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>แพลตฟอร์ม</label>
+                <div class="skills-input">
+                    <input type="text" id="platformInput" placeholder="เพิ่มแพลตฟอร์ม...">
+                    <button type="button" class="btn-primary" onclick="addPlatform()">เพิ่ม</button>
+                </div>
+                <div id="platformsList"></div>
+            </div>
+            
+            <div class="form-group">
+                <label>ภาษาโปรแกรมมิ่ง</label>
+                <div class="skills-input">
+                    <input type="text" id="languageInput" placeholder="เพิ่มภาษา...">
+                    <button type="button" class="btn-primary" onclick="addLanguage()">เพิ่ม</button>
+                </div>
+                <div id="languagesList"></div>
+            </div>
+            
+            <div class="form-group">
+                <label>เครื่องมือ</label>
+                <div class="skills-input">
+                    <input type="text" id="toolInput" placeholder="เพิ่มเครื่องมือ...">
+                    <button type="button" class="btn-primary" onclick="addTool()">เพิ่ม</button>
+                </div>
+                <div id="toolsList"></div>
+            </div>
+            
+            <div class="form-group">
+                <label>ภาษาที่พูดได้</label>
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <input type="text" id="spokenLangInput" placeholder="ภาษา (เช่น ไทย, อังกฤษ)" style="flex: 1;">
+                    <select id="spokenLevelInput" style="flex: 1;">
+                        <option value="">เลือกระดับ</option>
+                        <option value="Native">เจ้าของภาษา</option>
+                        <option value="Fluent">คล่องแคล่ว</option>
+                        <option value="Good">ดี</option>
+                        <option value="Fair">พอใช้</option>
+                    </select>
+                    <button type="button" class="btn-primary" onclick="addSpokenLanguage()" style="flex: 0 0 auto; padding: 10px 15px;">เพิ่ม</button>
+                </div>
+                <div id="spokenLanguagesList"></div>
+            </div>
+            
+            <div class="btn-group" style="margin-bottom: 10px;">
+                <button type="button" class="btn-secondary" onclick="mockData()">Mock ข้อมูล</button>
+            </div>
+            
+            <div class="btn-group" style="margin-bottom: 10px;">
+                <button type="button" class="btn-primary" onclick="generateCV('th')">Generate CV (TH)</button>
+                <button type="button" class="btn-primary" onclick="generateCV('en')">Generate CV (EN)</button>
+            </div>
+            
+            <div class="btn-group">
+                <button type="button" class="btn-success" onclick="downloadPNG('th')">Download PNG (TH)</button>
+                <button type="button" class="btn-success" onclick="downloadPNG('en')">Download PNG (EN)</button>
+            </div>
+        </div>
+        
+        <div class="preview-section">
+            <h2>Preview</h2>
+            <div id="svgContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        let skills = [];
+        let platforms = [];
+        let programmingLanguages = [];
+        let tools = [];
+        let spokenLanguages = {};
+        let uploadedPhoto = null;
+        let currentLanguage = 'th'; // เก็บภาษาปัจจุบัน
+        
+        // ข้อความแปลภาษา
+        const translations = {
+            th: {
+                summary: 'พร้อมเริ่มงานทันที',
+                personalInfo: 'ข้อมูลส่วนตัว',
+                name: 'ชื่อ',
+                position: 'ตำแหน่ง',
+                email: 'อีเมล',
+                phone: 'โทรศัพท์',
+                address: 'ที่อยู่',
+                hasLicense: 'มีใบขับขี่',
+                age: 'อายุ',
+                skills: 'ทักษะ',
+                education: 'การศึกษา',
+                major: 'สาขา',
+                university: 'มหาวิทยาลัย',
+                gradYear: 'ปีที่จบ',
+                experience: 'ประสบการณ์ทำงาน',
+                platform: 'แพลตฟอร์ม',
+                languages: 'ภาษาโปรแกรมมิ่ง',
+                tools: 'เครื่องมือ',
+                spokenLang: 'ภาษาพูด',
+                thai: 'ไทย',
+                english: 'อังกฤษ',
+                true: 'true',
+                false: 'false'
+            },
+            en: {
+                summary: 'Available immediately',
+                personalInfo: 'PersonalInfo',
+                name: 'Name',
+                position: 'Position',
+                email: 'Email',
+                phone: 'Phone',
+                address: 'Address',
+                hasLicense: 'HasLicense',
+                age: 'Age',
+                skills: 'Skills',
+                education: 'Education',
+                major: 'Major',
+                university: 'University',
+                gradYear: 'GradYear',
+                experience: 'Work Experience',
+                platform: 'Platforms',
+                languages: 'Languages',
+                tools: 'Tools',
+                spokenLang: 'SpokenLanguages',
+                thai: 'Thai',
+                english: 'English',
+                true: 'true',
+                false: 'false'
+            }
+        };
+        
+        function t(key, lang) {
+            return translations[lang][key] || key;
+        }
+        
+        function handlePhotoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedPhoto = e.target.result;
+                    // Auto generate to show uploaded photo
+                    generateCV();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function addSkill() {
+            const skillInput = document.getElementById('skillInput');
+            const skill = skillInput.value.trim();
+            
+            if (skill && !skills.includes(skill)) {
+                skills.push(skill);
+                updateSkillsList();
+                skillInput.value = '';
+            }
+        }
+        
+        function removeSkill(index) {
+            skills.splice(index, 1);
+            updateSkillsList();
+        }
+        
+        function updateSkillsList() {
+            const skillsList = document.getElementById('skillsList');
+            skillsList.innerHTML = skills.map((skill, index) => 
+                `<span class="skill-tag">${skill}<button onclick="removeSkill(${index})">×</button></span>`
+            ).join('');
+        }
+        
+        // Platform functions
+        function addPlatform() {
+            const platformInput = document.getElementById('platformInput');
+            const platform = platformInput.value.trim();
+            
+            if (platform && !platforms.includes(platform)) {
+                platforms.push(platform);
+                updatePlatformsList();
+                platformInput.value = '';
+            }
+        }
+        
+        function removePlatform(index) {
+            platforms.splice(index, 1);
+            updatePlatformsList();
+        }
+        
+        function updatePlatformsList() {
+            const platformsList = document.getElementById('platformsList');
+            platformsList.innerHTML = platforms.map((platform, index) => 
+                `<span class="skill-tag">${platform}<button onclick="removePlatform(${index})">×</button></span>`
+            ).join('');
+        }
+        
+        // Programming Language functions
+        function addLanguage() {
+            const languageInput = document.getElementById('languageInput');
+            const language = languageInput.value.trim();
+            
+            if (language && !programmingLanguages.includes(language)) {
+                programmingLanguages.push(language);
+                updateLanguagesList();
+                languageInput.value = '';
+            }
+        }
+        
+        function removeLanguage(index) {
+            programmingLanguages.splice(index, 1);
+            updateLanguagesList();
+        }
+        
+        function updateLanguagesList() {
+            const languagesList = document.getElementById('languagesList');
+            languagesList.innerHTML = programmingLanguages.map((lang, index) => 
+                `<span class="skill-tag">${lang}<button onclick="removeLanguage(${index})">×</button></span>`
+            ).join('');
+        }
+        
+        // Tool functions
+        function addTool() {
+            const toolInput = document.getElementById('toolInput');
+            const tool = toolInput.value.trim();
+            
+            if (tool && !tools.includes(tool)) {
+                tools.push(tool);
+                updateToolsList();
+                toolInput.value = '';
+            }
+        }
+        
+        function removeTool(index) {
+            tools.splice(index, 1);
+            updateToolsList();
+        }
+        
+        function updateToolsList() {
+            const toolsList = document.getElementById('toolsList');
+            toolsList.innerHTML = tools.map((tool, index) => 
+                `<span class="skill-tag">${tool}<button onclick="removeTool(${index})">×</button></span>`
+            ).join('');
+        }
+        
+        // Spoken Language functions
+        function addSpokenLanguage() {
+            const langInput = document.getElementById('spokenLangInput');
+            const levelInput = document.getElementById('spokenLevelInput');
+            const lang = langInput.value.trim();
+            const level = levelInput.value;
+            
+            if (lang && level && !spokenLanguages[lang]) {
+                spokenLanguages[lang] = level;
+                updateSpokenLanguagesList();
+                langInput.value = '';
+                levelInput.value = '';
+            }
+        }
+        
+        function removeSpokenLanguage(lang) {
+            delete spokenLanguages[lang];
+            updateSpokenLanguagesList();
+        }
+        
+        function updateSpokenLanguagesList() {
+            const spokenList = document.getElementById('spokenLanguagesList');
+            spokenList.innerHTML = Object.entries(spokenLanguages).map(([lang, level]) => 
+                `<span class="skill-tag">${lang} (${level})<button onclick="removeSpokenLanguage('${lang}')">×</button></span>`
+            ).join('');
+        }
+        
+        function mockData() {
+            document.getElementById('fullName').value = 'สมชาย นวัตกรรม';
+            document.getElementById('position').value = 'Senior Full Stack Developer';
+            document.getElementById('email').value = 'somchai.innovation@techcorp.com';
+            document.getElementById('phone').value = '08 9876 5432';
+            document.getElementById('age').value = '32';
+            document.getElementById('address').value = 'กรุงเทพมหานคร';
+            document.getElementById('hasLicense').value = 'true';
+            document.getElementById('degree').value = 'วิศวกรรมซอฟต์แวร์';
+            document.getElementById('university').value = 'มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี';
+            document.getElementById('gradYear').value = '2560';
+            document.getElementById('company').value = 'TechCorp Thailand';
+            document.getElementById('experience').value = `• Senior Full Stack Developer @ TechCorp (2565-ปัจจุบัน)
+  - พัฒนาระบบ Microservices ด้วย Node.js และ Kubernetes
+  - ลด deployment time 60% ด้วย CI/CD pipeline
+• Full Stack Developer @ InnovateTech (2562-2565)
+  - พัฒนา Web Application ด้วย React และ .NET Core
+• Junior Developer @ StartupHub (2560-2562)`;
+            
+            skills = ['React', 'Node.js', 'Docker', 'Kubernetes', 'MongoDB', 'PostgreSQL', 'Git'];
+            updateSkillsList();
+            
+            platforms = ['Windows', 'Linux', 'Docker', 'AWS', 'Azure', 'GCP'];
+            updatePlatformsList();
+            
+            programmingLanguages = ['C#', 'JavaScript', 'Python', 'TypeScript', 'Java', 'SQL', 'HTML5', 'CSS3'];
+            updateLanguagesList();
+            
+            tools = ['VS Code', 'Git', 'Docker', 'Jenkins', 'Kubernetes', 'Postman', 'Jira'];
+            updateToolsList();
+            
+            spokenLanguages = {
+                'ไทย': 'Native',
+                'อังกฤษ': 'Fluent'
+            };
+            updateSpokenLanguagesList();
+        }
+        
+        function generateCV(lang = 'th') {
+            // ตรวจสอบฟิลด์ที่จำเป็น
+            const requiredFields = [
+                { id: 'fullName', name: 'ชื่อ-นามสกุล' },
+                { id: 'position', name: 'ตำแหน่ง' },
+                { id: 'email', name: 'อีเมล' },
+                { id: 'phone', name: 'โทรศัพท์' },
+                { id: 'age', name: 'อายุ' },
+                { id: 'address', name: 'ที่อยู่' },
+                { id: 'degree', name: 'วุฒิการศึกษา' },
+                { id: 'university', name: 'มหาวิทยาลัย' },
+                { id: 'gradYear', name: 'ปีที่จบ' },
+                { id: 'company', name: 'บริษัทปัจจุบัน' }
+            ];
+            
+            for (const field of requiredFields) {
+                const value = document.getElementById(field.id).value.trim();
+                if (!value) {
+                    alert(`กรุณากรอก${field.name}`);
+                    document.getElementById(field.id).focus();
+                    return;
+                }
+            }
+            
+            currentLanguage = lang; // บันทึกภาษาที่เลือก
+            const data = {
+                fullName: document.getElementById('fullName').value || 'ชื่อ นามสกุล',
+                position: document.getElementById('position').value || 'ตำแหน่ง',
+                email: document.getElementById('email').value || 'email@example.com',
+                phone: document.getElementById('phone').value || '08 xxxx xxxx',
+                age: document.getElementById('age').value || '25',
+                address: document.getElementById('address').value || 'กรุงเทพมหานคร',
+                hasLicense: document.getElementById('hasLicense').value,
+                degree: document.getElementById('degree').value || 'สาขาวิชา',
+                university: document.getElementById('university').value || 'มหาวิทยาลัย',
+                gradYear: document.getElementById('gradYear').value || '2560',
+                company: document.getElementById('company').value || 'บริษัท',
+                experience: document.getElementById('experience').value || '',
+                skills: skills,
+                platforms: platforms,
+                programmingLanguages: programmingLanguages,
+                tools: tools,
+                spokenLanguages: spokenLanguages,
+                language: lang // เพิ่มภาษา
+            };
+            
+            const result = createSVG(data);
+            document.getElementById('svgContainer').innerHTML = result;
+        }
+        
+        function createSVG(data) {
+            const pageWidth = 794;
+            const minPageHeight = 1123; // ความสูงขั้นต่ำ A4
+            const leftColumnWidth = 250;
+            const rightColumnX = leftColumnWidth + 20;
+            
+            // คำนวณความสูงทั้งหมดที่ต้องใช้
+            const skillsHeight = data.skills.length * 20;
+            const experienceLineCount = data.experience.split('\n').length;
+            const experienceHeight = experienceLineCount * 20;
+            const platformsHeight = Math.ceil(data.platforms.length / 2) * 20;
+            const languagesHeight = data.programmingLanguages.length * 20;
+            const toolsHeight = data.tools.length * 20;
+            const spokenLangHeight = Object.keys(data.spokenLanguages).length * 20;
+            
+            // คำนวณความสูงรวม
+            const contentHeight = 700 + skillsHeight + experienceHeight + 50; // เพิ่ม padding
+            const leftColumnHeight = 300 + platformsHeight + languagesHeight + toolsHeight + spokenLangHeight + 200;
+            
+            // ใช้ความสูงที่มากกว่าระหว่างเนื้อหาหรือ A4
+            const pageHeight = Math.max(minPageHeight, contentHeight, leftColumnHeight);
+            
+            return createSinglePageSVG(data, pageWidth, pageHeight, leftColumnWidth, rightColumnX);
+        }
+        
+        function createSinglePageSVG(data, pageWidth, pageHeight, leftColumnWidth, rightColumnX) {
+            // คำนวณ Y positions สำหรับ enum ต่างๆ แบบ dynamic
+            let currentY = 280; // เริ่มต้นหลังรูปภาพ
+            
+            // Helper function สำหรับสร้าง enum section
+            const createEnumSection = (enumName, items, startY, mapFunction) => {
+                if (!items || items.length === 0) return { content: '', nextY: startY };
+                
+                const itemsText = mapFunction(items, startY);
+                const endY = startY + 40 + (enumName === 'Platform' ? Math.ceil(items.length / 2) * 20 : items.length * 20);
+                
+                const content = `
+    <text x="20" y="${startY}" fill="#569cd6">public</text>
+    <text x="70" y="${startY}" fill="#569cd6">enum</text>
+    <text x="110" y="${startY}" fill="#4ec9b0">${t(enumName === 'SpokenLang' ? 'spokenLang' : enumName.toLowerCase(), data.language)}</text>
+    <text x="20" y="${startY + 20}" fill="#ffd700">{</text>
+    ${itemsText}
+    <text x="20" y="${endY}" fill="#ffd700">}</text>`;
+                
+                return { content: content.trim(), nextY: endY + 40 };
+            };
+            
+            // สร้าง Platform enum
+            const platformEnum = createEnumSection('Platform', data.platforms, currentY, (items, startY) => {
+                return items.map((platform, i) => {
+                    const y = startY + 40 + Math.floor(i / 2) * 20;
+                    const x = 40 + (i % 2) * 80;
+                    const enumName = platform.replace(/[^a-zA-Z0-9]/g, '');
+                    return `<text x="${x}" y="${y}" fill="#9cdcfe">${enumName}${i < items.length - 1 ? ',' : ''}</text>`;
+                }).join('\n    ');
+            });
+            currentY = platformEnum.nextY;
+            
+            // สร้าง Languages enum
+            const languagesEnum = createEnumSection('Languages', data.programmingLanguages, currentY, (items, startY) => {
+                return items.map((lang, i) => {
+                    const y = startY + 40 + i * 20;
+                    const enumName = lang.replace(/[^a-zA-Z0-9]/g, '');
+                    return `<text x="40" y="${y}" fill="#9cdcfe">${enumName}</text>
+                    ${i < items.length - 1 ? `<text x="${40 + enumName.length * 8 + 10}" y="${y}" fill="#d4d4d4">,</text>` : ''}`;
+                }).join('\n    ');
+            });
+            currentY = languagesEnum.nextY;
+            
+            // สร้าง Tools enum
+            const toolsEnum = createEnumSection('Tools', data.tools, currentY, (items, startY) => {
+                return items.map((tool, i) => {
+                    const y = startY + 40 + i * 20;
+                    const enumName = tool.replace(/[^a-zA-Z0-9]/g, '');
+                    return `<text x="40" y="${y}" fill="#9cdcfe">${enumName}${i < items.length - 1 ? ',' : ''}</text>`;
+                }).join('\n    ');
+            });
+            currentY = toolsEnum.nextY;
+            
+            // สร้าง SpokenLanguages enum
+            const spokenLangEnum = createEnumSection('SpokenLang', Object.keys(data.spokenLanguages), currentY, (items, startY) => {
+                return Object.entries(data.spokenLanguages).map(([lang, level], i) => {
+                    const y = startY + 40 + i * 20;
+                    return `<text x="40" y="${y}" fill="#9cdcfe">${lang} = ${level}${i < Object.keys(data.spokenLanguages).length - 1 ? ',' : ''}</text>`;
+                }).join('\n    ');
+            });
+            
+            // สำหรับคอลัมน์ขวา
+            const skillsListText = data.skills.map((skill, i) => {
+                const y = 440 + i * 20;
+                return `<text x="${rightColumnX + 50}" y="${y}" fill="#ce9178">"${skill}"</text>
+                    ${i < data.skills.length - 1 ? `<text x="${rightColumnX + 50 + skill.length * 8 + 20}" y="${y}" fill="#d4d4d4">,</text>` : ''}`;
+            }).join('\n');
+            
+            const experienceLines = data.experience.split('\n').map((line, i) => 
+                `<text x="${rightColumnX}" y="${660 + data.skills.length * 20 + i * 20}" fill="#6a9955">// ${line}</text>`
+            ).join('\n');
+            
+            // Create photo element
+            const photoElement = uploadedPhoto ? 
+                `<image x="20" y="20" width="180" height="220" href="${uploadedPhoto}" preserveAspectRatio="xMidYMid slice" clip-path="url(#photoClip)"/>
+                <defs>
+                    <clipPath id="photoClip">
+                        <rect x="20" y="20" width="180" height="220" rx="2"/>
+                    </clipPath>
+                </defs>` :
+                `<rect x="20" y="20" width="180" height="220" fill="#2d2d30" stroke="#3e3e42" stroke-width="2"/>
+                <circle cx="110" cy="100" r="40" fill="#4a4a4d"/>
+                <ellipse cx="110" cy="180" rx="60" ry="50" fill="#4a4a4d"/>
+                <text x="110" y="130" font-family="Consolas, monospace" font-size="14" fill="#808080" text-anchor="middle">&lt;img&gt;</text>`;
+            
+            return `<svg width="${pageWidth}" height="${pageHeight}" viewBox="0 0 ${pageWidth} ${pageHeight}" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="${pageWidth}" height="${pageHeight}" fill="#1e1e1e"/>
+  
+  <!-- Left Panel -->
+  <rect x="0" y="0" width="${leftColumnWidth}" height="${pageHeight}" fill="#252526"/>
+  
+  <!-- Photo -->
+  <g>
+    ${photoElement}
+  </g>
+  
+  <!-- Left side info -->
+  <g font-family="Consolas, monospace" font-size="13" fill="#d4d4d4">
+    ${platformEnum.content}
+    ${languagesEnum.content}
+    ${toolsEnum.content}
+    ${spokenLangEnum.content}
+  </g>
+  
+  <!-- Main content -->
+  <g font-family="Consolas, monospace" font-size="13">
+    <!-- Comments -->
+    <text x="${rightColumnX}" y="40" fill="#6a9955">/// &lt;summary&gt;</text>
+    <text x="${rightColumnX}" y="60" fill="#6a9955">/// ${data.position}</text>
+    <text x="${rightColumnX}" y="80" fill="#6a9955">/// ${t('summary', data.language)}</text>
+    <text x="${rightColumnX}" y="100" fill="#6a9955">/// &lt;/summary&gt;</text>
+    
+    <text x="${rightColumnX}" y="140" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 50}" y="140" fill="#569cd6">class</text>
+    <text x="${rightColumnX + 100}" y="140" fill="#4ec9b0">${t('personalInfo', data.language)}</text>
+    <text x="${rightColumnX}" y="160" fill="#ffd700">{</text>
+    
+    <text x="${rightColumnX + 30}" y="190" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="190" fill="#569cd6">string</text>
+    <text x="${rightColumnX + 130}" y="190" fill="#9cdcfe">${t('name', data.language)}</text>
+    <text x="${rightColumnX + 170}" y="190" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 190}" y="190" fill="#ce9178">"${data.fullName}"</text>
+    <text x="${rightColumnX + 190 + data.fullName.length * 8 + 20}" y="190" fill="#d4d4d4">;</text>
+    
+    <text x="${rightColumnX + 30}" y="220" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="220" fill="#569cd6">string</text>
+    <text x="${rightColumnX + 130}" y="220" fill="#9cdcfe">${t('position', data.language)}</text>
+    <text x="${rightColumnX + 190}" y="220" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 210}" y="220" fill="#ce9178">"${data.position}"</text>
+    <text x="${rightColumnX + 210 + data.position.length * 8 + 20}" y="220" fill="#d4d4d4">;</text>
+    
+    <text x="${rightColumnX + 30}" y="250" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="250" fill="#569cd6">string</text>
+    <text x="${rightColumnX + 130}" y="250" fill="#9cdcfe">${t('email', data.language)}</text>
+    <text x="${rightColumnX + 180}" y="250" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 200}" y="250" fill="#ce9178">"${data.email}"</text>
+    <text x="${rightColumnX + 200 + data.email.length * 8 + 20}" y="250" fill="#d4d4d4">;</text>
+    
+    <text x="${rightColumnX + 30}" y="280" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="280" fill="#569cd6">string</text>
+    <text x="${rightColumnX + 130}" y="280" fill="#9cdcfe">${t('phone', data.language)}</text>
+    <text x="${rightColumnX + 200}" y="280" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 220}" y="280" fill="#ce9178">"${data.phone}"</text>
+    <text x="${rightColumnX + 220 + data.phone.length * 8 + 20}" y="280" fill="#d4d4d4">;</text>
+    
+    <text x="${rightColumnX + 30}" y="310" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="310" fill="#569cd6">string</text>
+    <text x="${rightColumnX + 130}" y="310" fill="#9cdcfe">${t('address', data.language)}</text>
+    <text x="${rightColumnX + 180}" y="310" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 200}" y="310" fill="#ce9178">"${data.address}"</text>
+    <text x="${rightColumnX + 200 + data.address.length * 8 + 20}" y="310" fill="#d4d4d4">;</text>
+    
+    <text x="${rightColumnX + 30}" y="340" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="340" fill="#569cd6">bool</text>
+    <text x="${rightColumnX + 130}" y="340" fill="#9cdcfe">${t('hasLicense', data.language)}</text>
+    <text x="${rightColumnX + 220}" y="340" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 240}" y="340" fill="#569cd6">${data.hasLicense}</text>
+    <text x="${rightColumnX + 240 + data.hasLicense.length * 8 + 10}" y="340" fill="#d4d4d4">;</text>
+    
+    <text x="${rightColumnX + 30}" y="370" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="370" fill="#569cd6">int</text>
+    <text x="${rightColumnX + 120}" y="370" fill="#9cdcfe">${t('age', data.language)}</text>
+    <text x="${rightColumnX + 160}" y="370" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 180}" y="370" fill="#b5cea8">${data.age}</text>
+    <text x="${rightColumnX + 180 + data.age.length * 8 + 10}" y="370" fill="#d4d4d4">;</text>
+    
+    <!-- Skills array -->
+    <text x="${rightColumnX + 30}" y="400" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="400" fill="#4ec9b0">List</text>
+    <text x="${rightColumnX + 120}" y="400" fill="#d4d4d4">&lt;</text>
+    <text x="${rightColumnX + 130}" y="400" fill="#569cd6">string</text>
+    <text x="${rightColumnX + 180}" y="400" fill="#d4d4d4">&gt;</text>
+    <text x="${rightColumnX + 200}" y="400" fill="#9cdcfe">${t('skills', data.language)}</text>
+    <text x="${rightColumnX + 250}" y="400" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 270}" y="400" fill="#569cd6">new</text>
+    <text x="${rightColumnX + 310}" y="400" fill="#4ec9b0">List</text>
+    <text x="${rightColumnX + 350}" y="400" fill="#d4d4d4">&lt;</text>
+    <text x="${rightColumnX + 360}" y="400" fill="#569cd6">string</text>
+    <text x="${rightColumnX + 410}" y="400" fill="#d4d4d4">&gt;</text>
+    <text x="${rightColumnX + 30}" y="420" fill="#ffd700">{</text>
+    ${skillsListText}
+    <text x="${rightColumnX + 30}" y="${460 + data.skills.length * 20}" fill="#ffd700">}</text>
+    <text x="${rightColumnX + 40}" y="${460 + data.skills.length * 20}" fill="#d4d4d4">;</text>
+    
+    <text x="${rightColumnX}" y="${480 + data.skills.length * 20}" fill="#ffd700">}</text>
+    
+    <!-- Education -->
+    <text x="${rightColumnX}" y="${500 + data.skills.length * 20}" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 50}" y="${500 + data.skills.length * 20}" fill="#569cd6">class</text>
+    <text x="${rightColumnX + 100}" y="${500 + data.skills.length * 20}" fill="#4ec9b0">${t('education', data.language)}</text>
+    <text x="${rightColumnX}" y="${520 + data.skills.length * 20}" fill="#ffd700">{</text>
+    <text x="${rightColumnX + 30}" y="${540 + data.skills.length * 20}" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="${540 + data.skills.length * 20}" fill="#569cd6">string</text>
+    <text x="${rightColumnX + 130}" y="${540 + data.skills.length * 20}" fill="#9cdcfe">${t('major', data.language)}</text>
+    <text x="${rightColumnX + 180}" y="${540 + data.skills.length * 20}" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 200}" y="${540 + data.skills.length * 20}" fill="#ce9178">"${data.degree}"</text>
+    <text x="${rightColumnX + 200 + data.degree.length * 8 + 20}" y="${540 + data.skills.length * 20}" fill="#d4d4d4">;</text>
+    <text x="${rightColumnX + 30}" y="${560 + data.skills.length * 20}" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="${560 + data.skills.length * 20}" fill="#569cd6">string</text>
+    <text x="${rightColumnX + 130}" y="${560 + data.skills.length * 20}" fill="#9cdcfe">${t('university', data.language)}</text>
+    <text x="${rightColumnX + 190}" y="${560 + data.skills.length * 20}" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 210}" y="${560 + data.skills.length * 20}" fill="#ce9178">"${data.university}"</text>
+    <text x="${rightColumnX + 210 + data.university.length * 8 + 20}" y="${560 + data.skills.length * 20}" fill="#d4d4d4">;</text>
+    <text x="${rightColumnX + 30}" y="${580 + data.skills.length * 20}" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="${580 + data.skills.length * 20}" fill="#569cd6">int</text>
+    <text x="${rightColumnX + 110}" y="${580 + data.skills.length * 20}" fill="#9cdcfe">${t('gradYear', data.language)}</text>
+    <text x="${rightColumnX + 170}" y="${580 + data.skills.length * 20}" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 190}" y="${580 + data.skills.length * 20}" fill="#b5cea8">${data.gradYear}</text>
+    <text x="${rightColumnX + 190 + data.gradYear.length * 8 + 10}" y="${580 + data.skills.length * 20}" fill="#d4d4d4">;</text>
+    <text x="${rightColumnX}" y="${600 + data.skills.length * 20}" fill="#ffd700">}</text>
+    
+    <!-- Experience comment -->
+    <text x="${rightColumnX}" y="${640 + data.skills.length * 20}" fill="#6a9955">// ${t('experience', data.language)} @ ${data.company}</text>
+    ${experienceLines}
+  </g>
+</svg>`;
+        }
+        
+        
+        function createPersonalInfoSection(data, rightColumnX, startY) {
+            return `<text x="${rightColumnX}" y="${startY}" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 50}" y="${startY}" fill="#569cd6">class</text>
+    <text x="${rightColumnX + 100}" y="${startY}" fill="#4ec9b0">${t('personalInfo', data.language)}</text>
+    <text x="${rightColumnX}" y="${startY + 20}" fill="#ffd700">{</text>
+    
+    <text x="${rightColumnX + 30}" y="${startY + 50}" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="${startY + 50}" fill="#569cd6">string</text>
+    <text x="${rightColumnX + 130}" y="${startY + 50}" fill="#9cdcfe">${t('name', data.language)}</text>
+    <text x="${rightColumnX + 170}" y="${startY + 50}" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 190}" y="${startY + 50}" fill="#ce9178">"${data.fullName}"</text>
+    <text x="${rightColumnX + 190 + data.fullName.length * 8 + 20}" y="${startY + 50}" fill="#d4d4d4">;</text>
+    
+    <text x="${rightColumnX + 30}" y="${startY + 80}" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="${startY + 80}" fill="#569cd6">string</text>
+    <text x="${rightColumnX + 130}" y="${startY + 80}" fill="#9cdcfe">${t('position', data.language)}</text>
+    <text x="${rightColumnX + 190}" y="${startY + 80}" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 210}" y="${startY + 80}" fill="#ce9178">"${data.position}"</text>
+    <text x="${rightColumnX + 210 + data.position.length * 8 + 20}" y="${startY + 80}" fill="#d4d4d4">;</text>
+    
+    <text x="${rightColumnX + 30}" y="${startY + 110}" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="${startY + 110}" fill="#569cd6">string</text>
+    <text x="${rightColumnX + 130}" y="${startY + 110}" fill="#9cdcfe">${t('email', data.language)}</text>
+    <text x="${rightColumnX + 180}" y="${startY + 110}" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 200}" y="${startY + 110}" fill="#ce9178">"${data.email}"</text>
+    <text x="${rightColumnX + 200 + data.email.length * 8 + 20}" y="${startY + 110}" fill="#d4d4d4">;</text>
+    
+    <text x="${rightColumnX + 30}" y="${startY + 140}" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="${startY + 140}" fill="#569cd6">string</text>
+    <text x="${rightColumnX + 130}" y="${startY + 140}" fill="#9cdcfe">${t('phone', data.language)}</text>
+    <text x="${rightColumnX + 200}" y="${startY + 140}" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 220}" y="${startY + 140}" fill="#ce9178">"${data.phone}"</text>
+    <text x="${rightColumnX + 220 + data.phone.length * 8 + 20}" y="${startY + 140}" fill="#d4d4d4">;</text>
+    
+    <text x="${rightColumnX + 30}" y="${startY + 170}" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="${startY + 170}" fill="#569cd6">string</text>
+    <text x="${rightColumnX + 130}" y="${startY + 170}" fill="#9cdcfe">${t('address', data.language)}</text>
+    <text x="${rightColumnX + 180}" y="${startY + 170}" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 200}" y="${startY + 170}" fill="#ce9178">"${data.address}"</text>
+    <text x="${rightColumnX + 200 + data.address.length * 8 + 20}" y="${startY + 170}" fill="#d4d4d4">;</text>
+    
+    <text x="${rightColumnX + 30}" y="${startY + 200}" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="${startY + 200}" fill="#569cd6">bool</text>
+    <text x="${rightColumnX + 130}" y="${startY + 200}" fill="#9cdcfe">${t('hasLicense', data.language)}</text>
+    <text x="${rightColumnX + 220}" y="${startY + 200}" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 240}" y="${startY + 200}" fill="#569cd6">${data.hasLicense}</text>
+    <text x="${rightColumnX + 240 + data.hasLicense.length * 8 + 10}" y="${startY + 200}" fill="#d4d4d4">;</text>
+    
+    <text x="${rightColumnX + 30}" y="${startY + 230}" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="${startY + 230}" fill="#569cd6">int</text>
+    <text x="${rightColumnX + 120}" y="${startY + 230}" fill="#9cdcfe">${t('age', data.language)}</text>
+    <text x="${rightColumnX + 160}" y="${startY + 230}" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 180}" y="${startY + 230}" fill="#b5cea8">${data.age}</text>
+    <text x="${rightColumnX + 180 + data.age.length * 8 + 10}" y="${startY + 230}" fill="#d4d4d4">;</text>
+    
+    <!-- Skills array -->
+    <text x="${rightColumnX + 30}" y="${startY + 260}" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="${startY + 260}" fill="#4ec9b0">List</text>
+    <text x="${rightColumnX + 120}" y="${startY + 260}" fill="#d4d4d4">&lt;</text>
+    <text x="${rightColumnX + 130}" y="${startY + 260}" fill="#569cd6">string</text>
+    <text x="${rightColumnX + 180}" y="${startY + 260}" fill="#d4d4d4">&gt;</text>
+    <text x="${rightColumnX + 200}" y="${startY + 260}" fill="#9cdcfe">${t('skills', data.language)}</text>
+    <text x="${rightColumnX + 250}" y="${startY + 260}" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 270}" y="${startY + 260}" fill="#569cd6">new</text>
+    <text x="${rightColumnX + 310}" y="${startY + 260}" fill="#4ec9b0">List</text>
+    <text x="${rightColumnX + 350}" y="${startY + 260}" fill="#d4d4d4">&lt;</text>
+    <text x="${rightColumnX + 360}" y="${startY + 260}" fill="#569cd6">string</text>
+    <text x="${rightColumnX + 410}" y="${startY + 260}" fill="#d4d4d4">&gt;</text>
+    <text x="${rightColumnX + 30}" y="${startY + 280}" fill="#ffd700">{</text>
+    ${data.skills.map((skill, i) => {
+        const y = startY + 300 + i * 20;
+        return `<text x="${rightColumnX + 50}" y="${y}" fill="#ce9178">"${skill}"</text>
+        ${i < data.skills.length - 1 ? `<text x="${rightColumnX + 50 + skill.length * 8 + 20}" y="${y}" fill="#d4d4d4">,</text>` : ''}`;
+    }).join('\n    ')}
+    <text x="${rightColumnX + 30}" y="${startY + 320 + data.skills.length * 20}" fill="#ffd700">}</text>
+    <text x="${rightColumnX + 40}" y="${startY + 320 + data.skills.length * 20}" fill="#d4d4d4">;</text>
+    
+    <text x="${rightColumnX}" y="${startY + 340 + data.skills.length * 20}" fill="#ffd700">}</text>`;
+        }
+        
+        function createEducationSection(data, rightColumnX, startY) {
+            return `<text x="${rightColumnX}" y="${startY}" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 50}" y="${startY}" fill="#569cd6">class</text>
+    <text x="${rightColumnX + 100}" y="${startY}" fill="#4ec9b0">${t('education', data.language)}</text>
+    <text x="${rightColumnX}" y="${startY + 20}" fill="#ffd700">{</text>
+    <text x="${rightColumnX + 30}" y="${startY + 40}" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="${startY + 40}" fill="#569cd6">string</text>
+    <text x="${rightColumnX + 130}" y="${startY + 40}" fill="#9cdcfe">${t('major', data.language)}</text>
+    <text x="${rightColumnX + 180}" y="${startY + 40}" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 200}" y="${startY + 40}" fill="#ce9178">"${data.degree}"</text>
+    <text x="${rightColumnX + 200 + data.degree.length * 8 + 20}" y="${startY + 40}" fill="#d4d4d4">;</text>
+    <text x="${rightColumnX + 30}" y="${startY + 60}" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="${startY + 60}" fill="#569cd6">string</text>
+    <text x="${rightColumnX + 130}" y="${startY + 60}" fill="#9cdcfe">${t('university', data.language)}</text>
+    <text x="${rightColumnX + 190}" y="${startY + 60}" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 210}" y="${startY + 60}" fill="#ce9178">"${data.university}"</text>
+    <text x="${rightColumnX + 210 + data.university.length * 8 + 20}" y="${startY + 60}" fill="#d4d4d4">;</text>
+    <text x="${rightColumnX + 30}" y="${startY + 80}" fill="#569cd6">public</text>
+    <text x="${rightColumnX + 80}" y="${startY + 80}" fill="#569cd6">int</text>
+    <text x="${rightColumnX + 110}" y="${startY + 80}" fill="#9cdcfe">${t('gradYear', data.language)}</text>
+    <text x="${rightColumnX + 170}" y="${startY + 80}" fill="#d4d4d4">=</text>
+    <text x="${rightColumnX + 190}" y="${startY + 80}" fill="#b5cea8">${data.gradYear}</text>
+    <text x="${rightColumnX + 190 + data.gradYear.length * 8 + 10}" y="${startY + 80}" fill="#d4d4d4">;</text>
+    <text x="${rightColumnX}" y="${startY + 100}" fill="#ffd700">}</text>`;
+        }
+        
+        function adjustYPosition(content, offset) {
+            return content.replace(/y="(\d+)"/g, (match, y) => {
+                return `y="${parseInt(y) + offset}"`;
+            });
+        }
+        
+        function downloadPNG(lang) {
+            // ถ้าไม่ระบุภาษา ใช้ภาษาจาก generate ล่าสุด
+            if (!lang) lang = currentLanguage;
+            
+            // Generate ใหม่ด้วยภาษาที่เลือก
+            generateCV(lang);
+            
+            // รอให้ render เสร็จก่อน download
+            setTimeout(() => {
+                const svgContainers = document.querySelectorAll('#svgContainer svg');
+                if (svgContainers.length === 0) {
+                    alert('กรุณา Generate CV ก่อน Download');
+                    return;
+                }
+            
+                // ตอนนี้มีแค่หน้าเดียวเสมอ
+                convertSVGtoPNG(svgContainers[0], 'cv-code-style.png');
+            }, 100);
+        }
+        
+        function convertSVGtoPNG(svgElement, filename) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const svgData = new XMLSerializer().serializeToString(svgElement);
+            
+            // กำหนดขนาด canvas เท่ากับ SVG จริง
+            const svgWidth = svgElement.getAttribute('width') || 794;
+            const svgHeight = svgElement.getAttribute('height') || 1123;
+            canvas.width = svgWidth;
+            canvas.height = svgHeight;
+            
+            const img = new Image();
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0);
+                
+                // แปลงเป็น PNG และดาวน์โหลด
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 'image/png');
+            };
+            
+            // แปลง SVG เป็น data URL
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+            img.src = url;
+        }
+        
+        
+        // Auto generate on load
+        window.onload = function() {
+            mockData();
+            generateCV();
+        };
+        
+        // Allow Enter key to add items
+        document.getElementById('skillInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addSkill();
+            }
+        });
+        
+        document.getElementById('platformInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addPlatform();
+            }
+        });
+        
+        document.getElementById('languageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addLanguage();
+            }
+        });
+        
+        document.getElementById('toolInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addTool();
+            }
+        });
+        
+        document.getElementById('spokenLangInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addSpokenLanguage();
+            }
+        });
+        
+        document.getElementById('spokenLevelInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addSpokenLanguage();
+            }
+        });
+    </script>
+</body>
+</html>
